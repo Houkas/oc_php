@@ -3,20 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Formulaire SQL</title>
     <script src="https://kit.fontawesome.com/e391ce7786.js" crossorigin="anonymous"></script>
-    <script src="app.js" defer></script>
 </head>
 <body>
     <div class="container">
        
-    <form action="jeux_video.php" method="post" enctype="multipart/form-data">
+    <!--<form action="jeux_video.php" method="post" enctype="multipart/form-data">
         <p> Quelle console recherchez-vous ?<br />
             <input type="text" name="console" /><br />
             <input type="submit" value="Envoyer le fichier" />
         </p>
-    </form> 
+    </form>-->
+
+    <form action="jeux_video.php" method="POST">
+        <p> Quel jeu souhaitez vous ajouter à la bibliothèque ?<br />
+            Son nom :</br>
+            <input type="text" name="nom" /><br />
+            Son possesseur :</br>
+            <input type="text" name="possesseur" /><br />
+            Sur quelle console :</br>
+            <input type="text" name="console" /><br />
+            Quel prix :</br>
+            <input type="text" name="prix" /><br />
+            Combien de joueurs max :</br>
+            <input type="text" name="nbre_joueurs_max" /><br />
+            Commentaire :</br>
+            <input type="textarea" name="commentaires" /><br />
+
+            <input type="submit" value="Envoyer" />
+            
+        </p>
+    </form>  
     
     </div>
 </body>
@@ -38,7 +56,7 @@
 
     $bdd = new PDO('mysql:host=localhost;dbname=test', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-    $requete = $bdd->prepare('SELECT * FROM jeux_video WHERE console=?'); 
+    /*$requete = $bdd->prepare('SELECT * FROM jeux_video WHERE console=?'); 
 
     if(isset($_POST['console'])){
 
@@ -48,6 +66,16 @@
             echo '<p>' . $donnees['nom'] . ' sur '.$donnees['console'] .' a ' .$donnees['prix'] . ' € ' .'</p>';
         }
 
+    }*/
+
+    //Ecriture SQL
+
+    $requete_insert = $bdd->prepare('INSERT INTO jeux_video(nom, possesseur, console, prix, nbre_joueurs_max, commentaires) VALUES(?, ?, ?, ?, ?, ?)'); 
+
+    if(isset($_POST['nom'],$_POST['possesseur'],$_POST['console'],$_POST['prix'],$_POST['nbre_joueurs_max'],$_POST['commentaires'])){
+
+            $requete_insert->execute(array($_POST['nom'],$_POST['possesseur'], $_POST['console'],$_POST['prix'],$_POST['nbre_joueurs_max'],$_POST['commentaires']));
+                
     }
     
 
