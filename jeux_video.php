@@ -9,12 +9,12 @@
 <body>
     <div class="container">
        
-    <!--<form action="jeux_video.php" method="post" enctype="multipart/form-data">
+    <form action="jeux_video.php" method="post" enctype="multipart/form-data">
         <p> Quelle console recherchez-vous ?<br />
             <input type="text" name="console" /><br />
-            <input type="submit" value="Envoyer le fichier" />
+            <input type="submit" value="Rechercher" />
         </p>
-    </form>-->
+    </form>
 
     <form action="jeux_video.php" method="POST">
         <p> Quel jeu souhaitez vous ajouter à la bibliothèque ?<br />
@@ -68,7 +68,7 @@
 
     }*/
 
-    //Ecriture SQL
+    //Ecriture SQL (insert)
 
     $requete_insert = $bdd->prepare('INSERT INTO jeux_video(nom, possesseur, console, prix, nbre_joueurs_max, commentaires) VALUES(?, ?, ?, ?, ?, ?)'); 
 
@@ -77,6 +77,21 @@
             $requete_insert->execute(array($_POST['nom'],$_POST['possesseur'], $_POST['console'],$_POST['prix'],$_POST['nbre_joueurs_max'],$_POST['commentaires']));
                 
     }
+
+    // Les fonctions SQL
+
+    $requete = $bdd->prepare('SELECT UPPER(nom) AS nom_majuscule, console, prix FROM jeux_video WHERE console=?'); 
+
+    if(isset($_POST['console'])){
+        $requete->execute(array($_POST['console']));
+    }
+
     
+
+    while ($donnees = $requete->fetch()){
+        echo '<p>' . $donnees['nom'] . ' sur '.$donnees['console'] .' a ' .$donnees['prix'] . ' € ' .'</p>';
+    }
+
+
 
 ?>
