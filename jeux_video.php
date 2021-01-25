@@ -80,18 +80,29 @@
 
     // Les fonctions SQL
 
-    $requete = $bdd->prepare('SELECT UPPER(nom) AS nom_majuscule, console, prix FROM jeux_video WHERE console=?'); 
+        // Function scalaire qui traite tout les valaurs d'une table (ici UPPER)
+
+    /*$requete = $bdd->prepare('SELECT UPPER(nom) AS nom_maj, console, prix FROM jeux_video WHERE console=?'); 
+
+
 
     if(isset($_POST['console'])){
         $requete->execute(array($_POST['console']));
     }
 
-    
-
     while ($donnees = $requete->fetch()){
-        echo '<p>' . $donnees['nom'] . ' sur '.$donnees['console'] .' a ' .$donnees['prix'] . ' € ' .'</p>';
+        echo '<p>' . $donnees['nom_maj'] . ' sur '.$donnees['console'] .' a ' .$donnees['prix'] . ' € '.'</p>';
+    }*/
+
+        //Function d'agrégat qui renvoit une seule valeur (ici AVG)
+
+    $requete = $bdd->query('SELECT SUM(prix) AS prix_total, possesseur FROM jeux_video GROUP BY possesseur HAVING prix_total > 100'); 
+
+
+    while($donnees = $requete->fetch()){
+    
+        echo $donnees['prix_total'] .' € est le prix total des jeux de ' .$donnees['possesseur'] .'</br>';
+
     }
-
-
 
 ?>
